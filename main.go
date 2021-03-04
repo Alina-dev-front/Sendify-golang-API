@@ -4,30 +4,28 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	// "io/ioutil"
 	"log"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	// "sendify-api/sqldb"
 )
 
 // DB is a global variable to hold db connection
 var DB *sql.DB
 
 type Shipment struct {
-	ID                   string  `json:"ID"`
-	SenderName           string  `json:"SenderName"`
-	SenderEmail          string  `json:"SenderEmail"`
-	SenderAddress        string  `json:"SenderAddress"`
-	SenderCountryCode    string  `json:"SenderCountryCode"`
-	RecipientName        string  `json:"RecipientName"`
-	RecipientEmail       string  `json:"RecipientEmail"`
-	RecipientAddress     string  `json:"RecipientAddress"`
-	RecipientCountryCode string  `json:"RecipientCountryCode"`
-	Weight               float64 `json:"Weight"`
-	Price                float64 `json:"Price"`
+	ID                   string
+	SenderName           string
+	SenderEmail          string
+	SenderAddress        string
+	SenderCountryCode    string
+	RecipientName        string
+	RecipientEmail       string
+	RecipientAddress     string
+	RecipientCountryCode string
+	Weight               float64
+	Price                float64
 }
 
 func getAllShipments(w http.ResponseWriter, r *http.Request) {
@@ -43,14 +41,12 @@ func getAllShipments(w http.ResponseWriter, r *http.Request) {
 		s := new(Shipment)
 		err := rows.Scan(&s.ID, &s.SenderName, &s.SenderEmail, &s.SenderAddress, &s.SenderCountryCode, &s.RecipientName, &s.RecipientEmail, &s.RecipientAddress, &s.RecipientCountryCode, &s.Weight, &s.Price)
 		if err != nil {
-			fmt.Println(err)
 			return
 		}
 		allShipments = append(allShipments, s)
 	}
 
 	if err := rows.Err(); err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -84,16 +80,19 @@ func getOneShipment(w http.ResponseWriter, r *http.Request) {
 
 func addShipment(w http.ResponseWriter, r *http.Request) {
 
-	insert, err := DB.Query("INSERT INTO `Shipments` (`SenderName`) VALUES('Dick Harrison')")
+	w.Header().Set("Content-Type", "application/json")
+	var shipment Shipment
+	_ = json.NewDecoder(r.Body).Decode(&shipment)
+	json.NewEncoder(w).Encode(shipment)
+
+	price := setFinalPrice(shipment.SenderCountryCode, shipment.Weight)
+
+	insert, err := DB.Query("INSERT INTO Shipments(SenderName, SenderEmail, SenderAddress, SenderCountryCode, RecipientName, RecipientEmail, RecipientAddress, RecipientCountryCode, Weight, Price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", shipment.SenderName, shipment.SenderEmail, shipment.SenderAddress, shipment.SenderCountryCode, shipment.RecipientName, shipment.RecipientEmail, shipment.RecipientAddress, shipment.RecipientCountryCode, shipment.Weight, price)
 	if err != nil {
 		panic(err)
 	}
 
 	defer insert.Close()
-}
-
-func homeLink(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome home!")
 }
 
 func main() {
@@ -107,7 +106,6 @@ func main() {
 	DB = db
 
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", homeLink)
 	router.HandleFunc("/shipment", addShipment).Methods("POST")
 	router.HandleFunc("/shipments/{id}", getOneShipment).Methods("GET")
 	router.HandleFunc("/shipments", getAllShipments).Methods("GET")
