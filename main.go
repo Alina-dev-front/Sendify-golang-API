@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+	"gopkg.in/validator.v2"
 )
 
 // DB is a global variable to hold db connection
@@ -17,16 +17,16 @@ var DB *sql.DB
 
 type Shipment struct {
 	ID                   string
-	SenderName           string  `validate: "required,lte=30"`
-	SenderEmail          string  `validate:"required,email"`
-	SenderAddress        string  `validate: "required,lte=100"`
-	SenderCountryCode    string  `validate:"required,len=2,uppercase"`
-	RecipientName        string  `validate: "required,lte=30"`
-	RecipientEmail       string  `validate: "required,email"`
-	RecipientAddress     string  `validate: "required,lte=100"`
-	RecipientCountryCode string  `validate: "required,len=2,uppercase"`
-	Weight               float64 `validate: "required"`
-	Price                float64 `validate: "isdefault"`
+	SenderName           string `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
+	SenderEmail          string `validate:"min=6"`
+	SenderAddress        string
+	SenderCountryCode    string `validate:"len=2"`
+	RecipientName        string `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
+	RecipientEmail       string `validate:"min=6"`
+	RecipientAddress     string
+	RecipientCountryCode string `validate:"len=2"`
+	Weight               float64
+	Price                float64
 }
 
 func getAllShipments(w http.ResponseWriter, r *http.Request) {
@@ -84,6 +84,16 @@ func addShipment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var shipment Shipment
 	_ = json.NewDecoder(r.Body).Decode(&shipment)
+
+	if errs := validator.Validate(shipment); errs != nil {
+		// values not valid, deal with errors here
+		fmt.Println("Xuy")
+		fmt.Println(errs)
+		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "Input invalid. Check documentation", http.StatusBadRequest)
+		return
+	}
+
 	json.NewEncoder(w).Encode(shipment)
 
 	price := setFinalPrice(shipment.SenderCountryCode, shipment.Weight)
