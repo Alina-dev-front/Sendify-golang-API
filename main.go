@@ -17,15 +17,15 @@ var DB *sql.DB
 
 type Shipment struct {
 	ID                   string
-	SenderName           string `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
-	SenderEmail          string `validate:"min=6"`
-	SenderAddress        string
-	SenderCountryCode    string `validate:"len=2"`
-	RecipientName        string `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
-	RecipientEmail       string `validate:"min=6"`
-	RecipientAddress     string
-	RecipientCountryCode string `validate:"len=2"`
-	Weight               float64
+	SenderName           string  `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
+	SenderEmail          string  `validate:"min=6"`
+	SenderAddress        string  `validate:"max=100"`
+	SenderCountryCode    string  `validate:"len=2"`
+	RecipientName        string  `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
+	RecipientEmail       string  `validate:"min=6"`
+	RecipientAddress     string  `validate:"max=100"`
+	RecipientCountryCode string  `validate:"len=2"`
+	Weight               float64 `validate:"max=100"`
 	Price                float64
 }
 
@@ -86,7 +86,6 @@ func addShipment(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&shipment)
 
 	if errs := validator.Validate(shipment); errs != nil {
-		// values not valid, deal with errors here
 		fmt.Println("Xuy")
 		fmt.Println(errs)
 		w.WriteHeader(http.StatusBadRequest)
