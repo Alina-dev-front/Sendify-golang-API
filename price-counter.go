@@ -27,9 +27,9 @@ func countWeightClassPrice(weight float64) float64 {
 
 func setFinalPrice(countryCode string, weight float64) string {
 	weightClassPrice := countWeightClassPrice(weight)
-
-	finalPrice := decimal.NewFromFloat(0.0)
 	priceDecimal := decimal.NewFromFloat(weightClassPrice)
+
+	var finalPrice decimal.Decimal
 
 	if belongToListNordicRegion(countryCode) == true {
 		finalPrice = priceDecimal
