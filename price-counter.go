@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/shopspring/decimal"
 )
 
@@ -41,13 +42,13 @@ func setFinalPrice(countryCode string, weight float64) string {
 }
 
 func belongToListNordicRegion(lookup string) bool {
-	list := []string{
+	listNordic := []string{
 		"SE",
 		"DK",
 		"NO",
 		"FI",
 	}
-	for _, val := range list {
+	for _, val := range listNordic {
 		if val == lookup {
 			return true
 		}
@@ -56,12 +57,33 @@ func belongToListNordicRegion(lookup string) bool {
 }
 
 func belongToListEU(lookup string) bool {
-	list := []string{
-		"AD",
+	listEU := []string{
 		"AT",
 		"BE",
+		"BG",
+		"HR",
+		"CY",
+		"CZ",
+		"EE",
+		"FR",
+		"DE",
+		"GR",
+		"HU",
+		"IE",
+		"IT",
+		"LV",
+		"LT",
+		"LU",
+		"MT",
+		"NL",
+		"PL",
+		"PT",
+		"RO",
+		"SK",
+		"SI",
+		"ES",
 	}
-	for _, val := range list {
+	for _, val := range listEU {
 		if val == lookup {
 			return true
 		}

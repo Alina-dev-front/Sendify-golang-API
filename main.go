@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 )
@@ -16,16 +17,16 @@ var DB *sql.DB
 
 type Shipment struct {
 	ID                   string
-	SenderName           string
-	SenderEmail          string
-	SenderAddress        string
-	SenderCountryCode    string
-	RecipientName        string
-	RecipientEmail       string
-	RecipientAddress     string
-	RecipientCountryCode string
-	Weight               float64
-	Price                float64
+	SenderName           string  `validate: "required,lte=30"`
+	SenderEmail          string  `validate:"required,email"`
+	SenderAddress        string  `validate: "required,lte=100"`
+	SenderCountryCode    string  `validate:"required,len=2,uppercase"`
+	RecipientName        string  `validate: "required,lte=30"`
+	RecipientEmail       string  `validate: "required,email"`
+	RecipientAddress     string  `validate: "required,lte=100"`
+	RecipientCountryCode string  `validate: "required,len=2,uppercase"`
+	Weight               float64 `validate: "required"`
+	Price                float64 `validate: "isdefault"`
 }
 
 func getAllShipments(w http.ResponseWriter, r *http.Request) {

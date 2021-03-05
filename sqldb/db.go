@@ -2,7 +2,6 @@ package sqldb
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 // DB is a global variable to hold db connection
@@ -14,6 +13,6 @@ func ConnectDB() *sql.DB {
 	if err != nil {
 		panic(err.Error())
 	}
-
 	DB = db
+	return DB
 }
