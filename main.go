@@ -6,11 +6,14 @@ import (
 	"log"
 	"net/http"
 
+	"sendify-api/counters"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gookit/validate"
 	"github.com/gorilla/mux"
 )
 
+//Shipment is a main struct in project
 type Shipment struct {
 	ID                                      string
 	SenderName, RecipientName               string  `validate:"required|maxLen:30|regex:^[^0-9]*$"`
@@ -55,7 +58,7 @@ func addShipment(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(shipment)
 
-	shipment.Price = setFinalPrice(shipment.SenderCountryCode, shipment.Weight)
+	shipment.Price = counters.SetFinalPrice(shipment.SenderCountryCode, shipment.Weight)
 
 	insertDataInDB(shipment)
 }
