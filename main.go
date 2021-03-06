@@ -7,21 +7,21 @@ import (
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gookit/validate"
 	"github.com/gorilla/mux"
-	"gopkg.in/validator.v2"
 )
 
 type Shipment struct {
 	ID                   string
-	SenderName           string  `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
-	SenderEmail          string  `validate:"min=6"`
-	SenderAddress        string  `validate:"max=100"`
-	SenderCountryCode    string  `validate:"len=2,regexp=^[A-Z]*$"`
-	RecipientName        string  `validate:"min=3,max=30,regexp=^[a-zA-Z]*$"`
-	RecipientEmail       string  `validate:"min=6"`
-	RecipientAddress     string  `validate:"max=100"`
-	RecipientCountryCode string  `validate:"len=2,regexp=^[A-Z]*$"`
-	Weight               float64 `validate:"max=1000"`
+	SenderName           string `validate:"required|maxLen:30|regex:^[^0-9]*$"`
+	SenderEmail          string `validate:"required|email"`
+	SenderAddress        string
+	SenderCountryCode    string
+	RecipientName        string
+	RecipientEmail       string
+	RecipientAddress     string
+	RecipientCountryCode string
+	Weight               float64
 	Price                string
 }
 
@@ -47,11 +47,11 @@ func getShipmentByID(w http.ResponseWriter, r *http.Request) {
 
 func addShipment(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Content-Type", "application/json")
 	var shipment Shipment
-	_ = json.NewDecoder(r.Body).Decode(&shipment)
+	json.NewDecoder(r.Body).Decode(&shipment)
 
-	if errs := validator.Validate(shipment); errs != nil {
+	v := validate.Struct(shipment)
+	if !v.Validate() {
 		w.WriteHeader(http.StatusBadRequest)
 		http.Error(w, "Input invalid. Check documentation", http.StatusBadRequest)
 		return
