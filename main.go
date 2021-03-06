@@ -12,17 +12,13 @@ import (
 )
 
 type Shipment struct {
-	ID                   string
-	SenderName           string `validate:"required|maxLen:30|regex:^[^0-9]*$"`
-	SenderEmail          string `validate:"required|email"`
-	SenderAddress        string
-	SenderCountryCode    string
-	RecipientName        string
-	RecipientEmail       string
-	RecipientAddress     string
-	RecipientCountryCode string
-	Weight               float64
-	Price                string
+	ID                                      string
+	SenderName, RecipientName               string  `validate:"required|maxLen:30|regex:^[^0-9]*$"`
+	SenderEmail, RecipientEmail             string  `validate:"required|email"`
+	SenderAddress, RecipientAddress         string  `validate:"required|maxLen:100"`
+	SenderCountryCode, RecipientCountryCode string  `validate:"required|len:2|regex:^[A-Z]*$"`
+	Weight                                  float64 `validate:"required|max:1000"`
+	Price                                   string
 }
 
 func getAllShipments(w http.ResponseWriter, r *http.Request) {
