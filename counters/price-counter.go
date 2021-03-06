@@ -9,7 +9,7 @@ import (
 //SetFinalPrice counts shipment price based on weight class and sender country code
 func SetFinalPrice(countryCode string, weight float64) string {
 	weightClassPrice := CountWeightClassPrice(weight)
-	priceDecimal := decimal.NewFromFloat(weightClassPrice)
+	priceDecimal := decimal.NewFromInt(weightClassPrice)
 
 	var finalPrice decimal.Decimal
 
@@ -24,8 +24,8 @@ func SetFinalPrice(countryCode string, weight float64) string {
 }
 
 //CountWeightClassPrice price depends on weight class of the package
-func CountWeightClassPrice(weight float64) float64 {
-	weightClassPrice := 0.0
+func CountWeightClassPrice(weight float64) int64 {
+	var weightClassPrice int64 = 0
 
 	switch {
 	case weight < 10:
