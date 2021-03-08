@@ -33,6 +33,9 @@ func TestSetFinalPrice(t *testing.T) {
 		{inputCountryCode: "FI", inputWeight: 1, expected: "100"},
 		{inputCountryCode: "FR", inputWeight: 1, expected: "150"},
 		{inputCountryCode: "RU", inputWeight: 1, expected: "250"},
+		{inputCountryCode: "SE", inputWeight: 100, expected: "2000"},
+		{inputCountryCode: "ES", inputWeight: 100, expected: "3000"},
+		{inputCountryCode: "US", inputWeight: 100, expected: "5000"},
 	}
 
 	for _, s := range scenarios {
@@ -41,5 +44,4 @@ func TestSetFinalPrice(t *testing.T) {
 			t.Errorf("Did not get expected result fot input '%v'. Got: '%v', expected: '%v'", s.inputCountryCode, got, s.expected)
 		}
 	}
-
 }

@@ -13,15 +13,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//Shipment is a main struct in project
+//Shipment defines the structure for API
 type Shipment struct {
-	ID                                      string
+	ID                                      string  `validate:"safe"`
 	SenderName, RecipientName               string  `validate:"required|maxLen:30|regex:^[^0-9]*$"`
 	SenderEmail, RecipientEmail             string  `validate:"required|email"`
 	SenderAddress, RecipientAddress         string  `validate:"required|maxLen:100"`
 	SenderCountryCode, RecipientCountryCode string  `validate:"required|len:2|regex:^[A-Z]*$"`
-	Weight                                  float64 `validate:"required|max:1000"`
-	Price                                   string
+	Weight                                  float64 `validate:"required|gt:0|max:1000"`
+	Price                                   string  `validate:"safe"`
 }
 
 func getAllShipments(w http.ResponseWriter, r *http.Request) {
