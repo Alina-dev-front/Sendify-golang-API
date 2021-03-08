@@ -1,15 +1,12 @@
 package counters
 
 import (
-	"fmt"
-
 	"github.com/shopspring/decimal"
 )
 
 //SetFinalPrice counts shipment price based on weight class and sender country code
 func SetFinalPrice(countryCode string, weight float64) string {
-	weightClassPrice := CountWeightClassPrice(weight)
-	priceDecimal := decimal.NewFromInt(weightClassPrice)
+	priceDecimal := decimal.NewFromInt(CountWeightClassPrice(weight))
 
 	var finalPrice decimal.Decimal
 
@@ -28,7 +25,7 @@ func CountWeightClassPrice(weight float64) int64 {
 	var weightClassPrice int64 = 0
 
 	switch {
-	case weight < 10:
+	case weight > 0 && weight < 10:
 		weightClassPrice = 100
 	case weight >= 10 && weight < 25:
 		weightClassPrice = 300
@@ -37,7 +34,7 @@ func CountWeightClassPrice(weight float64) int64 {
 	case weight >= 50 && weight <= 1000:
 		weightClassPrice = 2000
 	default:
-		fmt.Println("Invalid")
+		panic("Invalid weight. Weight should be not more than 1000")
 	}
 
 	return weightClassPrice

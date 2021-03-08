@@ -44,7 +44,7 @@ func getShipmentFromDB(id string) Shipment {
 	return shipment
 }
 
-func insertDataInDB(shipment Shipment) {
+func createShipment(shipment Shipment) {
 	insert, err := DB.Query("INSERT INTO Shipments(SenderName, SenderEmail, SenderAddress, SenderCountryCode, RecipientName, RecipientEmail, RecipientAddress, RecipientCountryCode, Weight, Price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", shipment.SenderName, shipment.SenderEmail, shipment.SenderAddress, shipment.SenderCountryCode, shipment.RecipientName, shipment.RecipientEmail, shipment.RecipientAddress, shipment.RecipientCountryCode, shipment.Weight, shipment.Price)
 	if err != nil {
 		panic(err)

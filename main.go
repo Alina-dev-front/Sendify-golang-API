@@ -60,7 +60,7 @@ func addShipment(w http.ResponseWriter, r *http.Request) {
 
 	shipment.Price = counters.SetFinalPrice(shipment.SenderCountryCode, shipment.Weight)
 
-	insertDataInDB(shipment)
+	createShipment(shipment)
 }
 
 func main() {
