@@ -7,23 +7,14 @@ import (
 	"net/http"
 
 	"sendify-api/counters"
+	"sendify-api/data"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gookit/validate"
 	"github.com/gorilla/mux"
 )
 
-//Shipment defines the structure for API
-type Shipment struct {
-	ID                                      string  `validate:"safe"`
-	SenderName, RecipientName               string  `validate:"required|maxLen:30|regex:^[^0-9]*$"`
-	SenderEmail, RecipientEmail             string  `validate:"required|email"`
-	SenderAddress, RecipientAddress         string  `validate:"required|maxLen:100"`
-	SenderCountryCode, RecipientCountryCode string  `validate:"required|len:2|regex:^[A-Z]*$"`
-	Weight                                  float64 `validate:"required|gt:0|max:1000"`
-	Price                                   string  `validate:"safe"`
-}
-
+//getAllShipments returns the shipments from the db
 func getAllShipments(w http.ResponseWriter, r *http.Request) {
 
 	allShipments := getAllShipmentsFromDB()
@@ -33,6 +24,7 @@ func getAllShipments(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//getShipmentByID returns one shipment according to inserted id
 func getShipmentByID(w http.ResponseWriter, r *http.Request) {
 
 	shipmentID := mux.Vars(r)["id"]
@@ -44,9 +36,10 @@ func getShipmentByID(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func addShipment(w http.ResponseWriter, r *http.Request) {
+//createShipment creates a new shipment according to user input data
+func createShipment(w http.ResponseWriter, r *http.Request) {
 
-	var shipment Shipment
+	var shipment data.Shipment
 	json.NewDecoder(r.Body).Decode(&shipment)
 
 	v := validate.Struct(shipment)
@@ -60,14 +53,14 @@ func addShipment(w http.ResponseWriter, r *http.Request) {
 
 	shipment.Price = counters.SetFinalPrice(shipment.SenderCountryCode, shipment.Weight)
 
-	createShipment(shipment)
+	addShipmentToDB(shipment)
 }
 
 func main() {
 	ConnectDB()
 
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/shipment", addShipment).Methods("POST")
+	router.HandleFunc("/shipment", createShipment).Methods("POST")
 	router.HandleFunc("/shipments/{id}", getShipmentByID).Methods("GET")
 	router.HandleFunc("/shipments", getAllShipments).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))
