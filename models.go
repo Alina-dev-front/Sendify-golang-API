@@ -5,7 +5,7 @@ import (
 )
 
 func getAllShipmentsFromDB() []*data.Shipment {
-	rows, err := DB.Query("SELECT * FROM Shipments")
+	rows, err := DB.Query("SELECT * FROM shipments")
 	if err != nil {
 		panic(err)
 	}
@@ -29,7 +29,7 @@ func getAllShipmentsFromDB() []*data.Shipment {
 
 func getShipmentFromDB(id string) data.Shipment {
 
-	result, err := DB.Query("SELECT * FROM `Shipments` WHERE id = ?", id)
+	result, err := DB.Query("SELECT * FROM shipments WHERE id = ?", id)
 	if err != nil {
 		panic(err)
 	}
@@ -49,7 +49,7 @@ func getShipmentFromDB(id string) data.Shipment {
 }
 
 func addShipmentToDB(shipment data.Shipment) {
-	insert, err := DB.Query("INSERT INTO Shipments(SenderName, SenderEmail, SenderAddress, SenderCountryCode, RecipientName, RecipientEmail, RecipientAddress, RecipientCountryCode, Weight, Price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", shipment.SenderName, shipment.SenderEmail, shipment.SenderAddress, shipment.SenderCountryCode, shipment.RecipientName, shipment.RecipientEmail, shipment.RecipientAddress, shipment.RecipientCountryCode, shipment.Weight, shipment.Price)
+	insert, err := DB.Query("INSERT INTO shipments(sender_name, sender_email, sender_address, sender_country_code, recipient_name, recipient_email, recipient_address, recipient_country_code, weight, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", shipment.SenderName, shipment.SenderEmail, shipment.SenderAddress, shipment.SenderCountryCode, shipment.RecipientName, shipment.RecipientEmail, shipment.RecipientAddress, shipment.RecipientCountryCode, shipment.Weight, shipment.Price)
 	if err != nil {
 		panic(err)
 	}

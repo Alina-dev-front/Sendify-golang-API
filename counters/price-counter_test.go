@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCountWeightClassPriceTableDriven(t *testing.T) {
+func TestCountWeightClassPrice(t *testing.T) {
 	scenarios := []struct {
 		input    float64
 		expected int64

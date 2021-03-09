@@ -2,7 +2,7 @@ package data
 
 //Shipment defines the structure for API
 type Shipment struct {
-	ID                   string  `json:"ID"`
+	ID                   string
 	SenderName           string  `json:"SenderName" validate:"required|maxLen:30|regex:^[^0-9]*$"`
 	SenderEmail          string  `json:"SenderEmail" validate:"required|email"`
 	SenderAddress        string  `json:"SenderAddress" validate:"required|maxLen:100"`
