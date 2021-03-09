@@ -11,13 +11,9 @@ Run commands in terminal:
 
 ## Running tests
 
-
-
-## Downloading libraries
-
-
+Run commands in terminal:
+    go test counters/price-counter_test.go
 
 ## API documentation 
 
 Can be found in "API_documentation.docx"
-
