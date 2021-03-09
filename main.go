@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"sendify-api/counters"
-	"sendify-api/data"
+	"Sendify-golang-API/counters"
+	"Sendify-golang-API/data"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gookit/validate"

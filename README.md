@@ -9,6 +9,10 @@ Run commands in terminal:
     go build
     ./sendify-api
 
+## Running tests
+
+
+
 ## Downloading libraries
 
 
@@ -16,3 +20,4 @@ Run commands in terminal:
 ## API documentation 
 
 Can be found in "API_documentation.docx"
+

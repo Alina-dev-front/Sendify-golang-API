@@ -1,7 +1,7 @@
 package counters_test
 
 import (
-	"sendify-api/counters"
+	"Sendify-golang-API/counters"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"sendify-api/data"
+	"Sendify-golang-API/data"
 )
 
 func getAllShipmentsFromDB() []*data.Shipment {

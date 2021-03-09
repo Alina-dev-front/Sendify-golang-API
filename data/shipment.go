@@ -12,5 +12,5 @@ type Shipment struct {
 	RecipientAddress     string  `json:"RecipientAddress" validate:"required|maxLen:100"`
 	RecipientCountryCode string  `json:"RecipientCountryCode" validate:"required|len:2|regex:^[A-Z]*$"`
 	Weight               float64 `json:"Weight" validate:"required|gt:0|max:1000"`
-	Price                string  `validate:"safe"`
+	Price                string
 }
