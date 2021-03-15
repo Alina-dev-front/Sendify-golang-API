@@ -1,0 +1,134 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API server for Shipments",
+        "title": "Sendify Shipment API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/shipment": {
+            "post": {
+                "description": "Create a new shipment with the input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipments"
+                ],
+                "summary": "Create a new shipment",
+                "parameters": [
+                    {
+                        "description": "Create shipment",
+                        "name": "shipment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/data.Shipment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/data.Shipment"
+                        }
+                    }
+                }
+            }
+        },
+        "/shipments": {
+            "get": {
+                "description": "returns array of all shipments from database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipments"
+                ],
+                "summary": "Get details of all shipments",
+                "operationId": "get-all-shipments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/data.Shipment"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/shipments/{shipmentId}": {
+            "get": {
+                "description": "Get details of shipment corresponding to inserted id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipments"
+                ],
+                "summary": "Get details for a given shipmentID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the shipment",
+                        "name": "shipmentId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/data.Shipment"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "data.Shipment": {
+            "type": "object",
+            "properties": {
+                "RecipientAddress": {
+                    "type": "string"
+                },
+                "RecipientCountryCode": {
+                    "type": "string"
+                },
+                "RecipientEmail": {
+                    "type": "string"
+                },
+                "RecipientName": {
+                    "type": "string"
+                },
+                "SenderAddress": {
+                    "type": "string"
+                },
+                "SenderCountryCode": {
+                    "type": "string"
+                },
+                "SenderEmail": {
+                    "type": "string"
+                },
+                "SenderName": {
+                    "type": "string"
+                },
+                "Weight": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

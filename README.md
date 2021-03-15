@@ -7,13 +7,13 @@ If you are not sure where to put project, run "go env GOPATH"
 
 Run commands in terminal:
     go build
-    ./sendify-api
+    ./Sendify-golang-API
 
 ## Running tests
 
-Run commands in terminal:
+Run command in terminal:
     go test counters/price-counter_test.go
 
 ## API documentation 
 
-Can be found in "API_documentation.docx"
+Run the application and proceed to http://localhost:8080/swagger/index.html 

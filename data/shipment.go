@@ -2,7 +2,7 @@ package data
 
 //Shipment defines the structure for API
 type Shipment struct {
-	ID                   string
+	ID                   string  `swaggerignore:"true"`
 	SenderName           string  `json:"SenderName" validate:"required|maxLen:30|regex:^[^0-9]*$"`
 	SenderEmail          string  `json:"SenderEmail" validate:"required|email"`
 	SenderAddress        string  `json:"SenderAddress" validate:"required|maxLen:100"`
@@ -12,5 +12,5 @@ type Shipment struct {
 	RecipientAddress     string  `json:"RecipientAddress" validate:"required|maxLen:100"`
 	RecipientCountryCode string  `json:"RecipientCountryCode" validate:"required|len:2|regex:^[A-Z]*$"`
 	Weight               float64 `json:"Weight" validate:"required|gt:0|max:1000"`
-	Price                string
+	Price                string  `swaggerignore:"true"`
 }

@@ -9,12 +9,27 @@ import (
 	"Sendify-golang-API/counters"
 	"Sendify-golang-API/data"
 
+	_ "Sendify-golang-API/docs"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gookit/validate"
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-//getAllShipments returns the shipments from the db
+// @title Sendify Shipment API
+// @version 1.0
+// @description API server for Shipments
+// @host localhost:8080
+// @Basepath /
+
+// @Summary Get details of all shipments
+// @Tags Shipments
+// @Description returns array of all shipments from database
+// @ID get-all-shipments
+// @Produce json
+// @Success 200 {array} data.Shipment
+// @Router /shipments [get]
 func getAllShipments(w http.ResponseWriter, r *http.Request) {
 
 	allShipments := getAllShipmentsFromDB()
@@ -24,7 +39,13 @@ func getAllShipments(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//getShipmentByID returns one shipment according to inserted id
+// @Summary Get details for a given shipmentID
+// @Description Get details of shipment corresponding to inserted id
+// @Tags Shipments
+// @Produce  json
+// @Param shipmentId path int true "ID of the shipment"
+// @Success 200 {object} data.Shipment
+// @Router /shipments/{shipmentId} [get]
 func getShipmentByID(w http.ResponseWriter, r *http.Request) {
 
 	shipmentID := mux.Vars(r)["id"]
@@ -36,7 +57,14 @@ func getShipmentByID(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//createShipment creates a new shipment according to user input data
+// @Summary Create a new shipment
+// @Description Create a new shipment with the input data
+// @Tags Shipments
+// @Accept  json
+// @Produce  json
+// @Param shipment body data.Shipment true "Create shipment"
+// @Success 200 {object} data.Shipment
+// @Router /shipment [post]
 func createShipment(w http.ResponseWriter, r *http.Request) {
 
 	var shipment data.Shipment
@@ -63,5 +91,6 @@ func main() {
 	router.HandleFunc("/shipment", createShipment).Methods("POST")
 	router.HandleFunc("/shipments/{id}", getShipmentByID).Methods("GET")
 	router.HandleFunc("/shipments", getAllShipments).Methods("GET")
+	router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

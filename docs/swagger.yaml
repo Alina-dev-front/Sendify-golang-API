@@ -1,0 +1,88 @@
+basePath: /
+definitions:
+  data.Shipment:
+    properties:
+      RecipientAddress:
+        type: string
+      RecipientCountryCode:
+        type: string
+      RecipientEmail:
+        type: string
+      RecipientName:
+        type: string
+      SenderAddress:
+        type: string
+      SenderCountryCode:
+        type: string
+      SenderEmail:
+        type: string
+      SenderName:
+        type: string
+      Weight:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API server for Shipments
+  title: Sendify Shipment API
+  version: "1.0"
+paths:
+  /shipment:
+    post:
+      consumes:
+      - application/json
+      description: Create a new shipment with the input data
+      parameters:
+      - description: Create shipment
+        in: body
+        name: shipment
+        required: true
+        schema:
+          $ref: '#/definitions/data.Shipment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.Shipment'
+      summary: Create a new shipment
+      tags:
+      - Shipments
+  /shipments:
+    get:
+      description: returns array of all shipments from database
+      operationId: get-all-shipments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/data.Shipment'
+            type: array
+      summary: Get details of all shipments
+      tags:
+      - Shipments
+  /shipments/{shipmentId}:
+    get:
+      description: Get details of shipment corresponding to inserted id
+      parameters:
+      - description: ID of the shipment
+        in: path
+        name: shipmentId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.Shipment'
+      summary: Get details for a given shipmentID
+      tags:
+      - Shipments
+swagger: "2.0"
